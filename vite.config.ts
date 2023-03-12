@@ -31,4 +31,18 @@ export default defineConfig({
       symbolId: 'icon-[dir]-[name]',
     })
   ],
+  build: {
+    outDir: path.resolve(__dirname, "dist"),
+    rollupOptions: {
+      output: {
+        inlineDynamicImports: false,
+        manualChunks: {
+          "modules-vue": ["vue", "vue-router", "vuex"]
+        }
+      }
+    }
+  },
+  optimizeDeps: {
+    include: ['element-plus/lib/locale/lang/zh-cn', 'element-plus/lib/locale/lang/en']
+  }
 })
