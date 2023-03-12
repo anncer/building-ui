@@ -1,23 +1,52 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+// import { RouterLink, RouterView } from 'vue-router'
+// import HelloWorld from './components/HelloWorld.vue'
+const config = {
+  width: 100,
+  height: 50,
+  fill: 'red',
+  stroke: 'black',
+  strokeWidth: 1,
+  pos: {
+    x: 0,
+    y: 0
+  }
+}
+const configKonva = {
+  width: 200,
+  height: 200
+}
+
+const configCircle = {
+  x: 100,
+  y: 100,
+  radius: 70,
+  fill: "red",
+  stroke: "black",
+  strokeWidth: 1
+}
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
+    <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
+    <v-stage :config="configKonva">
+      <v-layer>
+        <v-circle :config="configCircle"></v-circle>
+        <v-rect :config="config"></v-rect>
+      </v-layer>
+    </v-stage>
+    <!-- <div class="wrapper">
       <HelloWorld msg="You did it!" />
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
-    </div>
+    </div> -->
   </header>
 
-  <RouterView />
+  <!-- <RouterView /> -->
 </template>
 
 <style scoped>
