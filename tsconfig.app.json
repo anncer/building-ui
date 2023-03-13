@@ -17,7 +17,6 @@
     "skipLibCheck": true,
     "declarationDir": "types",
     "types": ["unplugin-vue-define-options", "node"],
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "paths": {
       "@/*": ["./src/*"]
     }

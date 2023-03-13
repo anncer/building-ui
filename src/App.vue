@@ -1,39 +1,17 @@
-<script setup lang="ts">
-// import { RouterLink, RouterView } from 'vue-router'
-// import HelloWorld from './components/HelloWorld.vue'
-const config = {
-  width: 100,
-  height: 50,
-  fill: 'red',
-  stroke: 'black',
-  strokeWidth: 1,
-  pos: {
-    x: 0,
-    y: 0
-  }
-}
-const configKonva = {
-  width: 200,
-  height: 200
-}
-
-const configCircle = {
-  x: 100,
-  y: 100,
-  radius: 70,
-  fill: "red",
-  stroke: "black",
-  strokeWidth: 1
-}
-</script>
 
 <template>
-  <header>
-    <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
-    <v-stage :config="configKonva">
+  <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
+  <header style="padding:20px;">
+    <v-stage :config="configKonva" background-color="#fff">
       <v-layer>
-        <v-circle :config="configCircle"></v-circle>
-        <v-rect :config="config"></v-rect>
+        <!-- <v-rect :config="config"></v-rect> -->
+        <template v-for="it in data.data" :key="it.name">
+          <v-rect v-if="it.type === 'rect'" :config="it.pos" ></v-rect>
+          <template v-for="line in it.lines" :key="line.points">
+            <v-line :points="line.points" :closed="false" stroke='red'></v-line>
+          </template>
+        </template>
+        <!-- <component /> -->
       </v-layer>
     </v-stage>
     <!-- <div class="wrapper">
@@ -48,6 +26,44 @@ const configCircle = {
 
   <!-- <RouterView /> -->
 </template>
+<script setup lang="ts">
+import getRowData from './data/row.ts'
+import {getCss} from '@/utils/dom'
+// import { RouterLink, RouterView } from 'vue-router'
+// import HelloWorld from './components/HelloWorld.vue'
+const data = getRowData()
+console.log(data)
+// const config = {
+//   width: 100,
+//   height: 100,
+//   fill: 'red',
+//   stroke: 'black',
+//   strokeWidth: 1,
+//   x: 300,
+//   y: 300
+//   // pos: {
+//   //   x: 0,
+//   //   y: 50
+//   // }
+// }
+const body = document.body
+const width = Number(getCss(body, 'width').split('px')[0]) - 40
+const height = Number(getCss(body, 'height').split('px')[0]) - 40
+const configKonva = {
+  width,
+  height,
+  fill: "#fff"
+}
+
+// const configCircle = {
+//   x: 100,
+//   y: 100,
+//   radius: 70,
+//   fill: "#fff",
+//   stroke: "black",
+//   strokeWidth: 1
+// }
+</script>
 
 <style scoped>
 header {

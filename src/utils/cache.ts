@@ -23,7 +23,7 @@ class LocalCache {
       value = window[type].getItem(key) || "";
     }
     if (value) {
-      return JSON.parse(value);
+      return value;
     }
     return null;
   }

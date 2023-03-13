@@ -2,10 +2,10 @@
 
 import { isArray, isProperty, isPlainObject, isFunction } from "./comment";
 // 获取当前时间的前几天或后几天
-export const GetDateSomeDay = (AddDayCount: number) => {
-  const dd = new Date();
+export const getDateSomeDay = (count: number, current?: string, ) => {
+  const dd = current ? new Date(current) : new Date();
 
-  dd.setDate(dd.getDate() + AddDayCount);
+  dd.setDate(dd.getDate() + count);
   const y = dd.getFullYear();
   const m =
     dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
@@ -49,7 +49,7 @@ export const addPercentage = (n: number | string): string => {
 };
 
 // 判断返回number  正负数添加正负号
-export const checkNum = (num: number) => {
+export const setNumPercent = (num: number) => {
   if (isNaN(num)) return "--";
   if (num > 0) {
     return "+" + addPercentage(num);
@@ -106,63 +106,102 @@ export const deepClone = (obj: any) => {
   return objClone;
 };
 
-export const extend = (...args: any) => {
-  let options;
+// export const extend = (...args: any) => {
+//   let options;
 
-  let name;
+//   let name;
 
-  let src;
+//   let src;
 
-  let copy;
+//   let copy;
 
-  let copyIsArray;
+//   let copyIsArray;
 
-  let clone;
+//   let clone;
 
-  let target = args[0] || {};
+//   let target = args[0] || {};
 
-  let i = 1;
-  const length = args.length;
+//   let i = 1;
+//   const length = args.length;
 
-  let deep = false;
+//   let deep = false;
 
-  if (typeof target === "boolean") {
-    deep = target;
-    target = args[1] || {};
-    i = 2;
-  }
-  if (typeof target !== "object" && !isFunction(target)) {
-    target = {};
-  }
-  if (length === i) {
-    target = this;
-    --i;
-  }
-  for (; i < length; i++) {
-    if ((options = args[i]) != null) {
-      for (name in options) {
-        src = target[name];
-        copy = options[name];
-        if (target === copy) {
-          continue;
-        }
-        if (
-          deep &&
-          copy &&
-          (isPlainObject(copy) || (copyIsArray = isArray(copy)))
-        ) {
-          if (copyIsArray) {
-            copyIsArray = false;
-            clone = src && isArray(src) ? src : [];
-          } else {
-            clone = src && isPlainObject(src) ? src : {};
-          }
-          target[name] = extend(deep, clone, copy);
-        } else if (copy !== undefined) {
-          target[name] = copy;
-        }
+//   if (typeof target === "boolean") {
+//     deep = target;
+//     target = args[1] || {};
+//     i = 2;
+//   }
+//   if (typeof target !== "object" && !isFunction(target)) {
+//     target = {};
+//   }
+//   if (length === i) {
+//     target = this;
+//     --i;
+//   }
+//   for (; i < length; i++) {
+//     if ((options = args[i]) != null) {
+//       for (name in options) {
+//         src = target[name];
+//         copy = options[name];
+//         if (target === copy) {
+//           continue;
+//         }
+//         if (
+//           deep &&
+//           copy &&
+//           (isPlainObject(copy) || (copyIsArray = isArray(copy)))
+//         ) {
+//           if (copyIsArray) {
+//             copyIsArray = false;
+//             clone = src && isArray(src) ? src : [];
+//           } else {
+//             clone = src && isPlainObject(src) ? src : {};
+//           }
+//           target[name] = extend(deep, clone, copy);
+//         } else if (copy !== undefined) {
+//           target[name] = copy;
+//         }
+//       }
+//     }
+//   }
+//   return target;
+// };
+// 金额分隔符
+export const analysiss = (opt: number | string) => {
+  if (opt) {
+      const str = opt + '';    //把数字变成string类型
+      if (str.indexOf('.') !== -1) {  //判断是否附带小数
+          const intSum = str
+              .substring(0, str.indexOf('.'))
+              .replace(/\B(?=(?:\d{3})+$)/g, ','); //取到整数部分
+          const dot = str.substring(str.length, str.indexOf('.')); //取到小数部分搜索
+          const ret = intSum + dot;
+          return ret;
+      } else {
+          const ret = str.replace(/\B(?=(?:\d{3})+$)/g, ',');
+          return ret + '.00';
       }
-    }
+  } else {
+      return '0.00';
   }
-  return target;
-};
+}
+
+// 金额分隔符
+export const analysis = (opt: number | string) => {
+  if (opt) {
+      const str = opt + '';    //把数字变成string类型
+      if (str.indexOf('.') !== -1) {  //判断是否附带小数
+          const intSum = str
+              .substring(0, str.indexOf('.'))
+              .replace(/\B(?=(?:\d{3})+$)/g, ','); //取到整数部分
+          const dot = str.substring(str.length, str.indexOf('.')); //取到小数部分搜索
+          const ret = intSum + dot;
+          return ret;
+      } else {
+          const ret = str.replace(/\B(?=(?:\d{3})+$)/g, ',');
+          return ret ;
+      }
+  } else {
+      return '0';
+  }
+}

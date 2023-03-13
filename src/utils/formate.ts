@@ -50,7 +50,7 @@ export function parseTime(time: string | number | object, cFormat: string) {
  * @param {string} option
  * @returns {string}
  */
-export function formatTime(time: number) {
+export function formatTime(time: any) {
   const d = new Date(time).getTime();
   const now = Date.now();
 
@@ -65,6 +65,15 @@ export function formatTime(time: number) {
     return Math.ceil(diff / 3600) + "小时前";
   } else if (diff < 3600 * 24 * 2) {
     return "1天前";
+  } else if (diff < 3600 * 24 * 30){
+    const n = Math.floor(diff/(3600 * 24))
+    return n + "天前";
+  } else if(diff < 3600 * 24 * 365){
+    const n = Math.floor(diff/(3600 * 24 * 30))
+    return n + "月前";
+  } else {
+    const n = Math.floor(diff/(3600 * 24 * 365))
+    return n + "年前";
   }
 }
 
@@ -115,40 +124,6 @@ export function cleanArray(actual: any[]) {
     }
   }
   return newArray;
-}
-
-/**
- * @param {Object} json
- * @returns {Array}
- */
-export function param(json: any): string {
-  if (!json) return "";
-  return cleanArray(
-    Object.keys(json).map((key) => {
-      if (json[key] === undefined) return "";
-      return encodeURIComponent(key) + "=" + encodeURIComponent(json[key]);
-    })
-  ).join("&");
-}
-
-/**
- * @param {string} url
- * @returns {Object}
- */
-export function param2Obj(url: string) {
-  const search = url.split("?")[1];
-  if (!search) {
-    return {};
-  }
-  return JSON.parse(
-    '{"' +
-      decodeURIComponent(search)
-        .replace(/"/g, '\\"')
-        .replace(/&/g, '","')
-        .replace(/=/g, '":"')
-        .replace(/\+/g, " ") +
-      '"}'
-  );
 }
 
 /**
@@ -214,7 +189,25 @@ export const toPoint = (arr: any[], coin = ",", type = false) => {
   }
   return str;
 };
-
+const deepSetObj = (obj:any, arr:any) => {
+  for (const it in obj) {
+    if (isObject(obj[it])) {
+      deepSetObj(obj[it], arr);
+    } else {
+      arr.push(it + "=" + obj[it]);
+    }
+  }
+};
+// 循环对象，并吧有值的键值对写在地址的后边
+export const jointUrl = (baseUrl:any, obj:any) => {
+  if (obj) {
+    const arr:any = [];
+    deepSetObj(obj, arr);
+    return isRealArray(arr) ? baseUrl + "?" + toPoint(arr, "&") : baseUrl;
+  } else {
+    return baseUrl;
+  }
+};
 // 循环对象，并吧有值的键值对写在地址的后边
 export const jointUrl2 = (baseUrl: string, obj: any) => {
   if (obj) {
@@ -225,6 +218,27 @@ export const jointUrl2 = (baseUrl: string, obj: any) => {
           const element = obj[it][key];
           arr.push(it + "." + key + "=" + element);
         }
+      } else {
+        arr.push(it + "=" + obj[it]);
+      }
+    }
+    return isRealArray(arr) ? baseUrl + "?" + toPoint(arr, "&") : baseUrl;
+  } else {
+    return baseUrl;
+  }
+};
+// 循环对象，并吧有值的键值对写在地址的后边
+export const jointUrl3 = (baseUrl: string, obj: any) => {
+  if (obj) {
+    const arr = [];
+    for (const it in obj) {
+      if (isObject(obj[it])) {
+        let str = ''
+        for (const key in obj[it]) {
+          const element = obj[it][key];
+          str += key + ":" + element
+        }
+        arr.push(it + "={" + str + "}")
       } else {
         arr.push(it + "=" + obj[it]);
       }
