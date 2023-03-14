@@ -1,7 +1,8 @@
 
 <template>
   <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
-  <header style="padding:20px;background-color:#fff">
+  <header class='header-top'>
+    <div class="header-title">数据中心一层分布图</div>
     <v-stage :config="configKonva" background-color="#fff">
       <v-layer>
         <!-- <v-rect :config="config"></v-rect> -->
@@ -15,9 +16,9 @@
         <!-- <component /> -->
       </v-layer>
     </v-stage>
+    
     <!-- <div class="wrapper">
       <HelloWorld msg="You did it!" />
-
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
@@ -32,7 +33,7 @@ import getRowData from './data/row.ts'
 import {getCss} from '@/utils/dom'
 const data = getRowData()
 const body = document.body
-const width = Number(getCss(body, 'width').split('px')[0]) - 40
+const width = Number(getCss(body, 'width').split('px')[0]) - 80
 const height = Number(getCss(body, 'height').split('px')[0]) - 40
 const configKonva = {
   width,
@@ -55,11 +56,24 @@ const handleClick = (e:any, row: any ) => {
 </script>
 
 <style scoped>
-header {
-  line-height: 1.5;
+.header-top {
   max-height: 100vh;
+  padding:20px;
+  background-color:#fff;
+  padding-top: 60px;
+  position: relative;
 }
-
+.header-title {
+  position: absolute;
+  top:0;
+  width: calc(100% - 40px);
+  font-size: 18px;
+  font-weight: bold;
+  height: 40px;
+  line-height: 40px;
+  text-align:center; 
+  color: #000
+}
 .logo {
   display: block;
   margin: 0 auto 2rem;
