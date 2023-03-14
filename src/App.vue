@@ -1,14 +1,15 @@
 
 <template>
   <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
-  <header style="padding:20px;">
+  <header style="padding:20px;background-color:#fff">
     <v-stage :config="configKonva" background-color="#fff">
       <v-layer>
         <!-- <v-rect :config="config"></v-rect> -->
         <template v-for="it in data.data" :key="it.name">
-          <v-rect v-if="it.type === 'rect'" :config="it.pos" ></v-rect>
+          <v-rect @click="handleClick($event, it)" v-if="it.type === 'rect'" :closed="false" :config="setRectPos(it.pos)" ></v-rect>
+          <v-text @click="handleClick($event, it)" v-if=" it.text &&  it.text.x" :config="{text:it.label, x: it.text.x, y: it.text.y, fontSize: it.text.fontSize || 12}"></v-text>
           <template v-for="line in it.lines" :key="line.points">
-            <v-line :points="line.points" :closed="false" stroke='red'></v-line>
+            <v-line :config="{points:line.points, strokeWidth: 1, closed:line.closed ,stroke:'#000'}" ></v-line>
           </template>
         </template>
         <!-- <component /> -->
@@ -29,23 +30,7 @@
 <script setup lang="ts">
 import getRowData from './data/row.ts'
 import {getCss} from '@/utils/dom'
-// import { RouterLink, RouterView } from 'vue-router'
-// import HelloWorld from './components/HelloWorld.vue'
 const data = getRowData()
-console.log(data)
-// const config = {
-//   width: 100,
-//   height: 100,
-//   fill: 'red',
-//   stroke: 'black',
-//   strokeWidth: 1,
-//   x: 300,
-//   y: 300
-//   // pos: {
-//   //   x: 0,
-//   //   y: 50
-//   // }
-// }
 const body = document.body
 const width = Number(getCss(body, 'width').split('px')[0]) - 40
 const height = Number(getCss(body, 'height').split('px')[0]) - 40
@@ -55,14 +40,18 @@ const configKonva = {
   fill: "#fff"
 }
 
-// const configCircle = {
-//   x: 100,
-//   y: 100,
-//   radius: 70,
-//   fill: "#fff",
-//   stroke: "black",
-//   strokeWidth: 1
-// }
+const setRectPos = (pos) => {
+  pos.x = pos.x + 1
+  pos.y = pos.y + 1
+  pos.width = pos.width - 2
+  pos.height = pos.height - 2
+  return pos
+}
+
+const handleClick = (e:any, row: any ) => {
+  alert(`您点击的是房间${row.room}房间名称是${row.label}`)
+}
+
 </script>
 
 <style scoped>
